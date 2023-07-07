@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class BankAnalyzer {
-	private static final String DATA_DIR = "./bankanalyzer/";
+	private static final String DATA_DIR = "src/main/resources/";
 
 	public static void main(final String... args) throws IOException {
 		final Parser parser = new Parser();
