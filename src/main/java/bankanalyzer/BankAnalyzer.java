@@ -10,35 +10,23 @@ import java.util.List;
 
 
 public class BankAnalyzer {
-	private static final String DATA_DIR = "src/main/resources/";
+	private static final String DATA_DIR = "src/main/resources/data.csv";
+	private static final Parser parser = new Parser();
 
 	public static void main(final String... args) throws IOException {
-		final Parser parser = new Parser();
-		final Path path = Paths.get(DATA_DIR + args[0]);
+		final Path path = Paths.get(DATA_DIR);
 		final List<String> lines = Files.readAllLines(path);
 		
 		final List<BankTransaction> bankTransactions
 				= parser.parseLines(lines);
+		final Processor processor = new Processor(bankTransactions);
 
-		System.out.println("Transaction total: " + getTotal(bankTransactions));
-		System.out.println("Transaction in Jan: " + getMonth(bankTransactions, Month.JANUARY));
+		summary(processor);
 	}
 
-	public static double getTotal(final List<BankTransaction> bankTransactions) {
-		double total = 0d;
-		for (final BankTransaction bankTransaction: bankTransactions) {
-			total += bankTransaction.getAmount();
-		}
-		return total;
-	}
-
-	public static List<BankTransaction> getMonth(final List<BankTransaction> bankTransactions, final Month month) {
-		final List<BankTransaction> result = new ArrayList<>();
-		for (final BankTransaction bankTransaction: bankTransactions) {
-			if (bankTransaction.getDate().getMonth() == month) {
-				result.add(bankTransaction);
-			}
-		}
-		return result;
+	private static void summary(Processor processor) {
+		System.out.println("Transaction total: " + processor.getTotal());
+		System.out.println("Transaction in January: " + processor.getMonthTotal(Month.JANUARY));
+		System.out.println("Total salary: " + processor.getCategoryTotal("Salary"));
 	}
 }
