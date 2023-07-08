@@ -7,17 +7,13 @@ import java.util.List;
 
 
 public class BankAnalyzer {
-	private static final String DATA_DIR = "src/main/resources/data.csv";
-	private static final Parser parser = new Parser();
-
-	public static void main(final String... args) throws IOException {
-		final Path path = Paths.get(DATA_DIR);
+	public void analyze(final String filename, final Parser parser) throws IOException {
+		final Path path = Paths.get(filename);
 		final List<String> lines = Files.readAllLines(path);
-		
+
 		final List<BankTransaction> bankTransactions
 				= parser.parseLines(lines);
 		final Processor processor = new Processor(bankTransactions);
-
 		summary(processor);
 	}
 

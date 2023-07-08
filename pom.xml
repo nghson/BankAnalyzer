@@ -23,7 +23,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>bankanalyzer.BankAnalyzer</mainClass>
+							<mainClass>bankanalyzer.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
