@@ -1,7 +1,7 @@
 package bankanalyzer;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -18,8 +18,8 @@ public class ParserCSVTest {
                 = new BankTransaction(LocalDate.of(2010, Month.OCTOBER, 10), 100, "Lidl");
         final double e = 0.0d;
 
-        Assert.assertEquals(expected.getDate(), result.getDate());
-        Assert.assertEquals(expected.getAmount(), result.getAmount(), e);
-        Assert.assertEquals(expected.getDescription(), result.getDescription());
+        Assertions.assertEquals(expected.getDate(), result.getDate());
+        Assertions.assertEquals(expected.getAmount(), result.getAmount(), e);
+        Assertions.assertEquals(expected.getDescription(), result.getDescription());
     }
 }
