@@ -1,6 +1,7 @@
 package bankanalyzer;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Processor {
@@ -10,31 +11,41 @@ public class Processor {
         this.bankTransactions = bankTransactions;
     }
 
-    public double getTotal() {
-        double total = 0d;
-        for (final BankTransaction bankTransaction: bankTransactions) {
-            total += bankTransaction.getAmount();
+    public double summarizeTransactions(final Summarizer summarizer) {
+        double result = 0;
+
+        for (final BankTransaction transaction: bankTransactions) {
+            result = summarizer.summarize(result, transaction);
         }
-        return total;
+
+        return result;
     }
 
     public double getMonthTotal(final Month month) {
-        double total = 0;
-        for (final BankTransaction bankTransaction: bankTransactions) {
-            if (bankTransaction.getDate().getMonth() == month) {
-                total += bankTransaction.getAmount();
-            }
-        }
-        return total;
+        return summarizeTransactions((total, transaction) ->
+                transaction.getDate().getMonth() == month ? total + transaction.getAmount() : total);
     }
 
     public double getCategoryTotal(final String category) {
-        double total = 0;
-        for (final BankTransaction bankTransaction: bankTransactions) {
-            if (bankTransaction.getDescription().equals(category)) {
-                total += bankTransaction.getAmount();
+        return summarizeTransactions((total, transaction) ->
+                transaction.getDescription().equals(category) ? total + transaction.getAmount() : total);
+    }
+
+    public double getTotal() {
+        return summarizeTransactions((total, transaction) -> total + transaction.getAmount());
+    }
+
+    public List<BankTransaction> findTransactionsGEQ(final int amount) {
+        return findTransactions(transaction -> transaction.getAmount() >= amount);
+    }
+
+    public List<BankTransaction> findTransactions(final BankTransactionFilter filter) {
+        final List<BankTransaction> result = new ArrayList<>();
+        for (final BankTransaction transaction: bankTransactions) {
+            if (filter.test(transaction)) {
+                result.add(transaction);
             }
         }
-        return total;
+        return result;
     }
 }
